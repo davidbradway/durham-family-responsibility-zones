@@ -1,0 +1,102 @@
+:root {
+  --header-bg: #012169;
+  --header-fg: #fff;
+  --panel-bg: #fff;
+  --text: #1f2328;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  background: var(--panel-bg);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--header-bg);
+  color: var(--header-fg);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+header .badge {
+  margin-left: auto;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--header-bg);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+header button {
+  font: inherit;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+#about {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.9rem;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+#about p { margin: 0 0 0.5rem; max-width: 70ch; }
+#data-dates { margin: 0; padding-left: 1.25rem; font-size: 0.8rem; color: #555; }
+
+#map {
+  flex: 1;
+  min-height: 0;
+}
+
+.legend {
+  background: var(--panel-bg);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.legend .swatch {
+  display: inline-block;
+  width: 1.5rem;
+  height: 0.7rem;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+
+.legend .line { height: 0; border-top-width: 3px; border-top-style: solid; }
+
+.leaflet-popup-content { font-size: 0.85rem; }
+.leaflet-popup-content h3 { margin: 0 0 0.25rem; font-size: 0.95rem; }
+.leaflet-popup-content table { border-collapse: collapse; }
+.leaflet-popup-content th { text-align: left; padding-right: 0.5rem; font-weight: 600; vertical-align: top; }
+
+@media (max-width: 600px) {
+  header h1 { font-size: 0.95rem; }
+  .legend { display: none; }
+}

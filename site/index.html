@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Durham Family Responsibility Zones</title>
+  <meta name="description" content="Map of Durham Public Schools Family Responsibility Zones, school assignment zones, and walk/bike infrastructure.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Durham Family Responsibility Zones</h1>
+    <span id="school-year" class="badge" hidden></span>
+    <button id="about-toggle" aria-expanded="false" aria-controls="about">About</button>
+  </header>
+  <aside id="about" hidden>
+    <p>
+      <strong>What is a Family Responsibility Zone?</strong> Durham Public Schools doesn't run buses
+      for students who live in the area right around some schools. If your home is inside a school's
+      <strong>Family Responsibility Zone (orange)</strong>, your family is responsible for getting
+      your child to school, whether by walking, biking, carpooling, or driving.
+    </p>
+    <p>
+      <strong>Using the map:</strong> Click any shape or line for details. Use the layer button
+      (top right) to show sidewalks, middle and high school zones, and more. Assignment zones show
+      which school a home is zoned for. Check with DPS for official assignments.
+    </p>
+    <p>
+      <strong>For walk and bike advocates:</strong> Compare the zones with existing and planned
+      sidewalks and bike facilities, and with <em>paper streets</em> (platted but unbuilt rights-of-way)
+      that could become short cut-throughs, to find gaps on the way to school.
+    </p>
+    <p>
+      Data refreshes weekly from the City of Durham and DPS. This is an independent volunteer project,
+      not an official DPS or City map. See <a href="https://github.com/davidbradway/durham-family-responsibility-zones/blob/main/DATA.md">sources</a>
+      or <a href="https://github.com/davidbradway/durham-family-responsibility-zones/issues">report a problem</a>.
+      For school walking routes, see the
+      <a href="https://www.durhamnc.gov/5417/Durham-Public-School-Travel-Maps-2025">Durham school travel maps</a>.
+    </p>
+    <ul id="data-dates"></ul>
+  </aside>
+  <main id="map" aria-label="Map"></main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

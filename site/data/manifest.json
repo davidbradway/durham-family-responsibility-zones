@@ -1,0 +1,58 @@
+{
+  "frz": {
+    "title": "DPS Family Responsibility Zones",
+    "source": "https://www.google.com/maps/d/viewer?mid=1VBBGZwnFRggYWzlq4T1NCGyMiZeaDkc",
+    "features": 43,
+    "updated": "2026-10-26"
+  },
+  "school_districts": {
+    "title": "DPS School Assignment Zones",
+    "source": "https://webgis2.durhamnc.gov/server/rest/services/PublicServices/Education/MapServer/21",
+    "features": 52,
+    "updated": "2026-10-26",
+    "school_year": "2026-27"
+  },
+  "schools": {
+    "title": "DPS Schools",
+    "source": "https://webgis2.durhamnc.gov/server/rest/services/PublicServices/Education/MapServer/22",
+    "features": 58,
+    "updated": "2026-10-26",
+    "school_year": "2026-27"
+  },
+  "existing_ped": {
+    "title": "Existing Pedestrian Facilities",
+    "source": "https://webgis2.durhamnc.gov/server/rest/services/ProjectServices/Trans_ExistingFutureBikePedFacilities/MapServer/0",
+    "features": 15118,
+    "updated": "2026-10-26"
+  },
+  "future_ped": {
+    "title": "Future Pedestrian Facilities",
+    "source": "https://webgis2.durhamnc.gov/server/rest/services/ProjectServices/Trans_ExistingFutureBikePedFacilities/MapServer/2",
+    "features": 83,
+    "updated": "2026-10-26"
+  },
+  "future_bike": {
+    "title": "Future Bike Facilities",
+    "source": "https://webgis2.durhamnc.gov/server/rest/services/ProjectServices/Trans_ExistingFutureBikePedFacilities/MapServer/3",
+    "features": 69,
+    "updated": "2026-10-26"
+  },
+  "existing_bike": {
+    "title": "Existing Bike Facilities",
+    "source": "https://webgis2.durhamnc.gov/server/rest/services/ProjectServices/Trans_ExistingFutureBikePedFacilities/MapServer/4",
+    "features": 614,
+    "updated": "2026-10-26"
+  },
+  "paper_streets": {
+    "title": "Paper Streets",
+    "source": "https://webgis2.durhamnc.gov/server/rest/services/ProjectServices/BMS_PaperStreets/MapServer/3",
+    "features": 621,
+    "updated": "2026-10-26"
+  },
+  "city_limits": {
+    "title": "Durham City Limits",
+    "source": "https://webgis2.durhamnc.gov/server/rest/services/PublicServices/Administrative/MapServer/1",
+    "features": 1,
+    "updated": "2026-10-26"
+  }
+}

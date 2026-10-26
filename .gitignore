@@ -1,0 +1,17 @@
+# Private working notes
+Notes.md
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local scratch downloads (raw source files are fetched by scripts/fetch_data.py)
+raw/
+*.kmz
