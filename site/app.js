@@ -82,7 +82,7 @@ const OVERLAYS = [
     // The My Maps export also has school pins; the DPS schools layer covers those.
     filter: (f) => f.geometry.type !== "Point",
     options: {
-      style: { color: COLORS.frz, weight: 2, fillColor: COLORS.frz, fillOpacity: 0.3 },
+      style: () => FRZ_STYLE,
       onEachFeature: (f, l) => l.bindPopup(popupTable(f.properties.name, f.properties, [["Notes", "description"]])),
     },
   },
@@ -207,6 +207,115 @@ function addLegend(year) {
   legend.addTo(map);
 }
 
+// FRZ names are abbreviated ("Forestview Elem 2", "Club Elem"); school records use full names
+// ("Forest View Elementary School", "Club Boulevard Elementary School"). Compare on a squashed key.
+const schoolKey = (name) =>
+  (name || "")
+    .toLowerCase()
+    .replace(/\b(elementary|elem|school|magnet|montessori)\b|\s\d+$/g, "")
+    .replace(/[^a-z]/g, "");
+
+// Find the record whose key starts with the FRZ's key (handles "Club" -> "Club Boulevard").
+const matchSchool = (key, records, nameOf) => records.find((r) => schoolKey(nameOf(r)).startsWith(key));
+
+const FRZ_STYLE = { color: COLORS.frz, weight: 2, fillColor: COLORS.frz, fillOpacity: 0.3 };
+const FRZ_ACTIVE = { color: "#7f2704", weight: 4, fillColor: COLORS.frz, fillOpacity: 0.5 };
+
+function buildSidebar(frzLayer, schoolsFC, districtsFC, year) {
+  const schools = (schoolsFC?.features || []).filter((f) => f.properties.factype === "Elementary");
+  const zones = (districtsFC?.features || []).filter((f) => /^Elementary/.test(f.properties.type || ""));
+
+  // Group FRZ polygons by school; a school can have several (Forest View has two).
+  const groups = new Map();
+  frzLayer.eachLayer((layer) => {
+    const key = schoolKey(layer.feature.properties.name);
+    if (!groups.has(key)) groups.set(key, { key, layers: [] });
+    groups.get(key).layers.push(layer);
+  });
+
+  const entries = [...groups.values()].map((g) => {
+    const school = matchSchool(g.key, schools, (s) => s.properties.name)?.properties;
+    const zone = matchSchool(g.key, zones, (z) => z.properties.shortname || z.properties.name)?.properties;
+    const name = school?.name || g.layers[0].feature.properties.name.replace(/\s\d+$/, "").replace(/\bElem\b/, "Elementary");
+    return { ...g, name, school, zone };
+  });
+  entries.sort((a, b) => a.name.localeCompare(b.name));
+
+  const list = document.getElementById("frz-list");
+  document.getElementById("frz-count").textContent = `(${entries.length})`;
+  let active = null;
+
+  function select(entry, { fly = true } = {}) {
+    if (active) {
+      active.layers.forEach((l) => l.setStyle(FRZ_STYLE));
+      active.li.classList.remove("active");
+      active.li.querySelector(".details").hidden = true;
+      active.li.querySelector("button").setAttribute("aria-expanded", "false");
+    }
+    active = entry;
+    entry.layers.forEach((l) => {
+      l.setStyle(FRZ_ACTIVE);
+      l.bringToFront();
+    });
+    entry.li.classList.add("active");
+    entry.li.querySelector(".details").hidden = false;
+    entry.li.querySelector("button").setAttribute("aria-expanded", "true");
+    entry.li.scrollIntoView({ block: "nearest" });
+    if (fly) {
+      if (!map.hasLayer(frzLayer)) frzLayer.addTo(map);
+      const bounds = L.featureGroup(entry.layers).getBounds();
+      map.flyToBounds(bounds, { padding: [40, 40], maxZoom: 16, duration: 0.8 });
+      // On phones, close the drawer so the map is visible.
+      if (window.matchMedia("(max-width: 700px)").matches) setSidebar(false);
+    }
+  }
+
+  for (const entry of entries) {
+    const s = entry.school || {};
+    const z = entry.zone || {};
+    const meta = [...new Set([s.grades, z.calendar, z.choice].filter(Boolean))].join(" · ");
+    const parts = entry.layers.length > 1 ? ` · ${entry.layers.length} zone areas` : "";
+    const rows = [
+      s.fulladdr && `<div>${esc(s.fulladdr)}</div>`,
+      s.phone && `<div>${esc(s.phone)}</div>`,
+      z.region && `<div>Region: ${esc(z.region)}</div>`,
+      !entry.zone && `<div>No elementary assignment zone in the ${esc(fmtYear(year))} data</div>`,
+      year && `<div>School info: ${esc(fmtYear(year))}</div>`,
+      s.agencyurl &&
+        `<div><a href="${esc(/^https?:/.test(s.agencyurl) ? s.agencyurl : `https://${s.agencyurl}`)}" target="_blank" rel="noopener">School website</a></div>`,
+    ].filter(Boolean);
+
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <button type="button" aria-expanded="false">
+        <div class="school-name">${esc(entry.name)}</div>
+        <div class="meta">${esc(meta)}${esc(parts)}</div>
+      </button>
+      <div class="details" hidden>${rows.join("")}</div>`;
+    li.querySelector("button").addEventListener("click", () => select(entry));
+    entry.li = li;
+    list.appendChild(li);
+    // Clicking the zone on the map highlights it in the list too.
+    entry.layers.forEach((l) => l.on("click", () => select(entry, { fly: false })));
+  }
+
+  document.getElementById("frz-filter").addEventListener("input", (e) => {
+    const q = e.target.value.trim().toLowerCase();
+    for (const entry of entries) entry.li.hidden = q && !entry.name.toLowerCase().includes(q);
+  });
+}
+
+const sidebar = document.getElementById("sidebar");
+const sidebarBtn = document.getElementById("sidebar-toggle");
+function setSidebar(open) {
+  sidebar.hidden = !open;
+  sidebarBtn.setAttribute("aria-expanded", String(open));
+  map.invalidateSize();
+}
+sidebarBtn.addEventListener("click", () => setSidebar(sidebar.hidden));
+// Start with the drawer closed on phones.
+if (window.matchMedia("(max-width: 700px)").matches) setSidebar(false);
+
 async function init() {
   let manifest = {};
   try {
@@ -246,7 +355,13 @@ async function init() {
     if (def.on) layer.addTo(map);
   }
   const frz = results.find((r) => r.status === "fulfilled" && r.value.def.file === "frz.geojson");
-  if (frz) map.fitBounds(frz.value.layer.getBounds(), { padding: [20, 20] });
+  if (frz) {
+    map.fitBounds(frz.value.layer.getBounds(), { padding: [20, 20] });
+    const [schoolsFC, districtsFC] = await Promise.all(
+      ["schools.geojson", "school_districts.geojson"].map((f) => cache[f].catch(() => null))
+    );
+    buildSidebar(frz.value.layer, schoolsFC, districtsFC, year);
+  }
   addLegend(year);
 
   document.getElementById("data-dates").innerHTML = Object.values(manifest)

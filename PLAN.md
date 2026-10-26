@@ -16,6 +16,7 @@ with data that refreshes from authoritative public sources automatically.
 - [x] Add school assignment zones, always using the newest dated year from the Education service (now 2026–27), with the year shown on the map
 - [x] Fetch script using only the standard library, keeping the last good copy when a source fails
 - [x] Static Leaflet page with a layer switcher, popups, and a legend; sidewalks off by default
+- [x] Sidebar listing every school with an FRZ (grades, calendar, program, address, website); click to zoom to its zones
 - [x] Weekly GitHub Action to fetch data, commit it, and deploy to Pages
 - [x] Create the GitHub repo and enable Pages (source: GitHub Actions)
 - [ ] Visual QA against the ArcGIS map

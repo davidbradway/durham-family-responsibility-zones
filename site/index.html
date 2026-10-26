@@ -12,6 +12,7 @@
   <header>
     <h1>Durham Family Responsibility Zones</h1>
     <span id="school-year" class="badge" hidden></span>
+    <button id="sidebar-toggle" aria-expanded="true" aria-controls="sidebar">Schools</button>
     <button id="about-toggle" aria-expanded="false" aria-controls="about">About</button>
   </header>
   <aside id="about" hidden>
@@ -40,7 +41,16 @@
     </p>
     <ul id="data-dates"></ul>
   </aside>
-  <main id="map" aria-label="Map"></main>
+  <div class="layout">
+    <nav id="sidebar" aria-label="Family Responsibility Zones">
+      <div class="sidebar-head">
+        <h2>Schools with an FRZ <span id="frz-count"></span></h2>
+        <input id="frz-filter" type="search" placeholder="Filter schools…" aria-label="Filter schools">
+      </div>
+      <ul id="frz-list"></ul>
+    </nav>
+    <main id="map" aria-label="Map"></main>
+  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="app.js"></script>
 </body>

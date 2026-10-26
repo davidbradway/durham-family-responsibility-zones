@@ -67,10 +67,87 @@ header button {
 #about p { margin: 0 0 0.5rem; max-width: 70ch; }
 #data-dates { margin: 0; padding-left: 1.25rem; font-size: 0.8rem; color: #555; }
 
-#map {
+.layout {
   flex: 1;
   min-height: 0;
+  display: flex;
+  position: relative;
 }
+
+#map {
+  flex: 1;
+  min-width: 0;
+}
+
+#sidebar {
+  width: 300px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #ddd;
+  background: var(--panel-bg);
+}
+
+#sidebar[hidden] { display: none; }
+
+.sidebar-head {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.sidebar-head h2 { margin: 0 0 0.4rem; font-size: 0.95rem; }
+#frz-count { font-weight: 400; color: #555; }
+
+#frz-filter {
+  width: 100%;
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+
+#frz-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+#frz-list li { border-bottom: 1px solid #eee; }
+
+#frz-list button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  padding: 0.55rem 0.75rem 0.55rem 0.6rem;
+  border: 0;
+  border-left: 4px solid transparent;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+#frz-list button:hover,
+#frz-list button:focus-visible { background: #f3f4f6; }
+
+#frz-list li.active button {
+  border-left-color: #e66101;
+  background: #fdf0e6;
+}
+
+#frz-list .school-name { font-weight: 600; font-size: 0.9rem; }
+#frz-list .meta { font-size: 0.78rem; color: #555; margin-top: 0.1rem; }
+
+#frz-list .details {
+  font-size: 0.78rem;
+  padding: 0 0.75rem 0.6rem 1rem;
+  background: #fdf0e6;
+}
+
+#frz-list .details a { color: #012169; }
 
 .legend {
   background: var(--panel-bg);
@@ -96,7 +173,16 @@ header button {
 .leaflet-popup-content table { border-collapse: collapse; }
 .leaflet-popup-content th { text-align: left; padding-right: 0.5rem; font-weight: 600; vertical-align: top; }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   header h1 { font-size: 0.95rem; }
+  header .badge { display: none; }
   .legend { display: none; }
+  /* Sidebar becomes a drawer over the map. */
+  #sidebar {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: min(85vw, 320px);
+    z-index: 1000;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.25);
+  }
 }

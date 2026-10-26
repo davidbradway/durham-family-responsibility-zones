@@ -15,7 +15,7 @@ This project replaces an earlier
 
 ## Layers
 
-- DPS Family Responsibility Zones
+- DPS Family Responsibility Zones, with a sidebar listing each school that has one (click to zoom)
 - Elementary, middle, and high school assignment zones (newest school year Durham publishes, shown on the map)
 - DPS school locations
 - Existing sidewalks and paths (off by default) and future pedestrian facilities
